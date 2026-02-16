@@ -1,5 +1,4 @@
-const visualizerId = () => {
-  return <div>visualizerId</div>;
+const VisualizerId = () => {
+  return <div>VisualizerId</div>;
 };
-
-export default visualizerId;
+export default VisualizerId;
