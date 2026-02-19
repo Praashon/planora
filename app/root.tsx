@@ -92,7 +92,6 @@ export default function App() {
       <Outlet
         context={{ ...authState, refreshAuth, setAuthState, signIn, signOut }}
       />
-      ;
     </main>
   );
 }
