@@ -81,7 +81,12 @@ const VisualizerId = () => {
               >
                 <Download className="w-4 h-4 mr-2" /> Export
               </Button>
-              <Button className="Share" size="sm" onClick={() => {}}>
+              <Button
+                className="Share"
+                size="sm"
+                onClick={() => {}}
+                disabled={!currentImage}
+              >
                 <Share2 className="w-4 h-4 mr-2" /> Share
               </Button>
             </div>
