@@ -21,7 +21,7 @@ const VisualizerId = () => {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentImage, setCurrentImage] = useState<string | null>(null);
-
+  E
   const handleBack = () => navigate("/");
 
   const handleExport = () => {
