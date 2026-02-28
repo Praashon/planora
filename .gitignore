@@ -1,5 +1,6 @@
 .DS_Store
 .env
+.env.localWrite a handleExport function that downloads the currently rendered image in the browser in app/routes/visualizer.$id.tsx. If currentImage is falsy, return early.
 /node_modules/
 
 # React Router

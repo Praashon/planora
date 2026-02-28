@@ -133,7 +133,7 @@ const Upload = ({ onComplete, fileSizeLimit = 50 }: UploadProps) => {
           <input
             type="file"
             className="drop-input"
-            accept=".jpg, .jpeg, .png"
+            accept=".jpg, .jpeg, .png, .webpWrite a handleExport function that downloads the currently rendered image in the browser in app/routes/visualizer.$id.tsx. If currentImage is falsy, return early."
             disabled={!isSignedIn}
             onChange={handleInputChange}
           />
