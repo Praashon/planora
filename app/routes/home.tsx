@@ -77,44 +77,48 @@ export default function Home() {
     <div className="home">
       <Navbar />
       <section className="hero">
-        <div className="announce">
-          <div className="dot">
-            <div className="pulse"></div>
-          </div>
-
-          <p>Introducing Planora 2.0</p>
-        </div>
-
-        <h1>Build beautiful spaces at the speed of thought with Planora</h1>
-
-        <p className="subtitle">
-          Planora is an AI-FIRST powerful design tool that helps you create
-          beautiful and functional spaces.
-        </p>
-
-        <div className="actions">
-          <a href="#upload" className="cta">
-            Start Building <ArrowRight className="icon" />
-          </a>
-
-          <Button variant="outline" size="lg" className="demo">
-            Watch Demo!
-          </Button>
-        </div>
-
-        <div id="upload" className="upload-shell">
-          <div className="grid-overlay" />
-          <div className="upload-card">
-            <div className="upload-head">
-              <div className="upload-icon">
-                <Layers className="icon" />
-              </div>
-
-              <h3>Upload your floor plan</h3>
-              <p>Supports JPG, PNG format up to 50 MB</p>
+        <div className="hero-content">
+          <div className="announce">
+            <div className="dot">
+              <div className="pulse"></div>
             </div>
 
-            <Upload onComplete={handleUploadComplete} fileSizeLimit={50} />
+            <p>Introducing Planora 2.0</p>
+          </div>
+
+          <h1>Build beautiful spaces at the speed of thought with Planora</h1>
+
+          <p className="subtitle">
+            Planora is an AI-FIRST powerful design tool that helps you create
+            beautiful and functional spaces.
+          </p>
+
+          <div className="actions">
+            <a href="#upload" className="cta">
+              Start Building <ArrowRight className="icon" />
+            </a>
+
+            <Button variant="outline" size="lg" className="demo">
+              Watch Demo!
+            </Button>
+          </div>
+        </div>
+
+        <div className="hero-visual">
+          <div id="upload" className="upload-shell">
+            <div className="grid-overlay" />
+            <div className="upload-card">
+              <div className="upload-head">
+                <div className="upload-icon">
+                  <Layers className="icon" />
+                </div>
+
+                <h3>Upload your floor plan</h3>
+                <p>Supports JPG, PNG format up to 50 MB</p>
+              </div>
+
+              <Upload onComplete={handleUploadComplete} fileSizeLimit={50} />
+            </div>
           </div>
         </div>
       </section>
