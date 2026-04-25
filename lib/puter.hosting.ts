@@ -19,7 +19,7 @@ export const getOrConfigHostingConfig =
     )) as HostingConfig | null;
 
     if (existing?.subdomain) {
-      subdomain: existing.subdomain;
+      return existing;
     }
 
     const subdomain = createHostingSlug();

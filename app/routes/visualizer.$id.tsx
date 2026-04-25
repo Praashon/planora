@@ -8,12 +8,14 @@ import {
   ReactCompareSliderImage,
 } from "react-compare-slider";
 import { useNavigate, useOutletContext, useParams } from "react-router";
+import { useToast } from "components/Toast";
 
 const VisualizerId = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { userId } = useOutletContext<AuthContext>();
 
+  const { toast } = useToast();
   const hasInitialGenerated = useRef(false);
 
   const [project, setProject] = useState<DesignItem | null>(null);
@@ -21,7 +23,7 @@ const VisualizerId = () => {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentImage, setCurrentImage] = useState<string | null>(null);
-  E
+
   const handleBack = () => navigate("/");
 
   const handleExport = () => {
@@ -32,6 +34,18 @@ const VisualizerId = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    toast("Image exported successfully!", "success");
+  };
+
+  const handleShare = async () => {
+    if (!id) return;
+    const url = `${window.location.origin}/visualizer/${id}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast("Link copied to clipboard!", "success");
+    } catch {
+      toast("Failed to copy link.", "error");
+    }
   };
 
   const runGeneration = async (item: DesignItem) => {
@@ -67,6 +81,7 @@ const VisualizerId = () => {
       }
     } catch (error) {
       console.error("Generation failed: ", error);
+      toast("Render generation failed. Please try again.", "error");
     } finally {
       setIsProcessing(false);
     }
@@ -151,7 +166,7 @@ const VisualizerId = () => {
               <Button
                 className="share"
                 size="sm"
-                onClick={() => {}}
+                onClick={handleShare}
                 disabled={!currentImage}
               >
                 <Share2 className="w-4 h-4 mr-2" /> Share

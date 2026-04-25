@@ -1,22 +1,38 @@
 import Navbar from "components/Navbar";
 import type { Route } from "./+types/home";
-import { ArrowRight, ArrowUpRight, Clock, Layers } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Clock, Layers, Trash2 } from "lucide-react";
 import { Button } from "components/ui/Button";
 import Upload from "components/Upload";
 import { useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
-import { createProject, getProject } from "lib/puter.action";
+import { createProject, deleteProject, getProject } from "lib/puter.action";
+import { useToast } from "components/Toast";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Planora — AI-First Floor Plan to 3D Render" },
+    {
+      name: "description",
+      content:
+        "Planora converts 2D floor plans into photorealistic top-down 3D architectural renders using AI. Upload, visualize, compare, and export.",
+    },
+    {
+      property: "og:title",
+      content: "Planora — AI-First Floor Plan to 3D Render",
+    },
+    {
+      property: "og:description",
+      content: "Convert 2D floor plans into photorealistic 3D renders with AI.",
+    },
+    { name: "twitter:card", content: "summary_large_image" },
   ];
 }
 
 export default function Home() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [projects, setProjects] = useState<DesignItem[]>([]);
+  const [isLoadingProjects, setIsLoadingProjects] = useState(true);
   const isCreatingProjectRef = useRef(false);
 
   const handleUploadComplete = async (base64Image: string) => {
@@ -45,6 +61,7 @@ export default function Home() {
 
       if (!saved) {
         console.warn("Project save failed, proceeding with local data.");
+        toast("Project saved locally — cloud sync unavailable.", "warning");
       }
 
       setProjects((prev) => [projectToUse, ...prev]);
@@ -63,11 +80,33 @@ export default function Home() {
     }
   };
 
+  const handleDelete = async (e: React.MouseEvent, projectId: string) => {
+    e.stopPropagation();
+    const confirmed = window.confirm(
+      "Delete this project? This cannot be undone.",
+    );
+    if (!confirmed) return;
+
+    const ok = await deleteProject({ id: projectId });
+    if (ok) {
+      setProjects((prev) => prev.filter((p) => p.id !== projectId));
+      toast("Project deleted.", "success");
+    } else {
+      toast("Failed to delete project.", "error");
+    }
+  };
+
   useEffect(() => {
     const fetchProject = async () => {
-      const items = await getProject();
-
-      setProjects(items);
+      setIsLoadingProjects(true);
+      try {
+        const items = await getProject();
+        setProjects(items);
+      } catch {
+        toast("Failed to load projects.", "error");
+      } finally {
+        setIsLoadingProjects(false);
+      }
     };
 
     fetchProject();
@@ -136,39 +175,76 @@ export default function Home() {
           </div>
 
           <div className="projects-grid">
-            {projects.map(
-              ({ id, name, sourceImage, renderedImage, timestamp }) => (
-                <div
-                  key={id}
-                  className="project-card group"
-                  onClick={() => navigate(`/visualizer/${id}`)}
-                >
-                  <div className="preview">
-                    <img src={renderedImage || sourceImage} alt="project" />
-
-                    <div className="badge">
-                      <span>Community</span>
-                    </div>
-                  </div>
-
-                  <div className="card-body">
-                    <div>
-                      <h3>{name}</h3>
-
-                      <div className="meta">
-                        <Clock className="icon" size={12} />
-
-                        <span>{new Date(timestamp).toLocaleDateString()}</span>
-                        <span>By Prannav Panta</span>
-                      </div>
-                    </div>
-
-                    <div className="arrow">
-                      <ArrowUpRight size={18} />
-                    </div>
+            {isLoadingProjects ? (
+              Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="skeleton-card">
+                  <div className="skeleton-preview" />
+                  <div className="skeleton-body">
+                    <div className="skeleton-title" />
+                    <div className="skeleton-meta" />
                   </div>
                 </div>
-              ),
+              ))
+            ) : projects.length === 0 ? (
+              <div className="empty">
+                No projects yet — upload a floor plan to get started.
+              </div>
+            ) : (
+              projects.map(
+                ({
+                  id,
+                  name,
+                  sourceImage,
+                  renderedImage,
+                  timestamp,
+                  sharedBy,
+                }) => (
+                  <div
+                    key={id}
+                    className="project-card group"
+                    onClick={() => navigate(`/visualizer/${id}`)}
+                  >
+                    <div className="preview">
+                      <img
+                        src={renderedImage || sourceImage}
+                        alt={name || "Project"}
+                        loading="lazy"
+                      />
+
+                      <div className="badge">
+                        <span>Community</span>
+                      </div>
+
+                      <button
+                        className="delete-btn"
+                        onClick={(e) => handleDelete(e, id)}
+                        aria-label={`Delete ${name || "project"}`}
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+
+                    <div className="card-body">
+                      <div>
+                        <h3>{name}</h3>
+
+                        <div className="meta">
+                          <Clock className="icon" size={12} />
+
+                          <span>
+                            {new Date(timestamp).toLocaleDateString()}
+                          </span>
+                          <span>By {sharedBy || "You"}</span>
+                        </div>
+                      </div>
+
+                      <div className="arrow">
+                        <ArrowUpRight size={18} />
+                      </div>
+                    </div>
+                  </div>
+                ),
+              )
             )}
           </div>
         </div>

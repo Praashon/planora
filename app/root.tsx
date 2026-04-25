@@ -15,6 +15,7 @@ import {
   signIn as puterSignIn,
   signOut as puterSignOut,
 } from "lib/puter.action";
+import { ToastProvider } from "components/Toast";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -88,11 +89,13 @@ export default function App() {
   };
 
   return (
-    <main className="min-h-screen bg-background text-foreground relative z-10">
-      <Outlet
-        context={{ ...authState, refreshAuth, setAuthState, signIn, signOut }}
-      />
-    </main>
+    <ToastProvider>
+      <main className="min-h-screen bg-background text-foreground relative z-10">
+        <Outlet
+          context={{ ...authState, refreshAuth, setAuthState, signIn, signOut }}
+        />
+      </main>
+    </ToastProvider>
   );
 }
 

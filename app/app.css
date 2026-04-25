@@ -149,7 +149,7 @@
       }
 
       .actions {
-        @apply flex items-center space-x-6;
+        @apply hidden md:flex items-center space-x-6;
 
         .greeting {
           @apply text-xs font-mono uppercase tracking-widest text-zinc-400;
@@ -167,6 +167,18 @@
           @apply inline-flex items-center justify-center rounded-none font-medium transition-all duration-300 focus:outline-none focus:ring-1 focus:ring-black focus:ring-offset-2 disabled:opacity-40 disabled:cursor-not-allowed px-5 py-2.5 text-xs uppercase tracking-[0.1em] bg-black text-white hover:bg-zinc-800 shadow-sm hover:shadow-md;
         }
       }
+    }
+  }
+
+  .mobile-toggle {
+    @apply md:hidden flex items-center justify-center w-10 h-10 text-zinc-600 hover:text-black transition-colors cursor-pointer;
+  }
+
+  .mobile-menu {
+    @apply fixed top-20 left-0 w-full bg-white border-b border-zinc-200 z-50 flex flex-col items-center gap-4 py-8 px-6 md:hidden;
+
+    a {
+      @apply text-xs font-mono uppercase tracking-widest text-zinc-500 hover:text-black transition-colors;
     }
   }
 
@@ -569,6 +581,10 @@
                   @apply text-[9px] font-mono uppercase tracking-[0.2em] text-black;
                 }
               }
+
+              .delete-btn {
+                @apply absolute top-4 right-4 w-8 h-8 bg-white border border-zinc-200 flex items-center justify-center text-zinc-400 hover:text-red-600 hover:border-red-300 transition-all opacity-0 group-hover:opacity-100 cursor-pointer z-10;
+              }
             }
 
             .card-body {
@@ -598,6 +614,26 @@
 
           .empty {
             @apply col-span-full border border-dashed border-zinc-300 bg-transparent p-16 text-center text-xs font-mono uppercase tracking-[0.2em] text-zinc-400;
+          }
+
+          .skeleton-card {
+            @apply bg-white border border-zinc-200 overflow-hidden animate-pulse;
+
+            .skeleton-preview {
+              @apply aspect-[4/3] bg-zinc-100;
+            }
+
+            .skeleton-body {
+              @apply p-6 space-y-4 border-t border-zinc-100;
+
+              .skeleton-title {
+                @apply h-6 w-3/4 bg-zinc-100 rounded;
+              }
+
+              .skeleton-meta {
+                @apply h-3 w-1/2 bg-zinc-50 rounded;
+              }
+            }
           }
         }
       }
@@ -629,6 +665,53 @@
           }
         }
       }
+    }
+  }
+
+  .toast-container {
+    @apply fixed bottom-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none;
+  }
+
+  .toast {
+    @apply pointer-events-auto flex items-center gap-3 px-5 py-3.5 bg-white border border-zinc-200 shadow-editorial text-sm font-sans text-black animate-[slideIn_0.3s_ease-out];
+
+    .toast-icon {
+      @apply w-4 h-4 shrink-0;
+    }
+
+    .toast-message {
+      @apply flex-1 text-xs font-mono uppercase tracking-[0.1em];
+    }
+
+    .toast-close {
+      @apply shrink-0 text-zinc-400 hover:text-black transition-colors cursor-pointer;
+    }
+
+    &.toast--success .toast-icon {
+      @apply text-emerald-600;
+    }
+
+    &.toast--error .toast-icon {
+      @apply text-red-600;
+    }
+
+    &.toast--warning .toast-icon {
+      @apply text-amber-500;
+    }
+
+    &.toast--info .toast-icon {
+      @apply text-zinc-500;
+    }
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
     }
   }
 
