@@ -56,7 +56,9 @@ const Navbar = () => {
           <div className="left">
             <div className="brand">
               <Box className="logo" />
-              <span className="name">Planora</span>
+              <span className="name">
+                <a href="/">Planora</a>
+              </span>
             </div>
 
             <ul className="links">
