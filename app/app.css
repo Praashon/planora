@@ -717,6 +717,52 @@
         }
       }
 
+      .style-selector {
+        @apply px-8 py-6 border-b border-border;
+
+        .style-label {
+          @apply text-[10px] uppercase tracking-[0.2em] mb-4;
+          color: var(--color-muted);
+        }
+
+        .style-options {
+          @apply flex flex-wrap gap-3;
+        }
+
+        .style-pill {
+          @apply inline-flex items-center gap-2 px-4 py-2.5 border border-border text-xs uppercase tracking-[0.1em] transition-all duration-300 cursor-pointer;
+          background-color: transparent;
+          color: var(--color-muted);
+
+          &:hover:not(:disabled) {
+            @apply border-accent/40;
+            color: var(--color-foreground);
+          }
+
+          &.active {
+            @apply border-accent;
+            color: var(--color-accent);
+            background-color: rgba(212, 165, 116, 0.08);
+          }
+
+          &:disabled {
+            @apply opacity-40 cursor-not-allowed;
+          }
+
+          .style-icon {
+            @apply text-sm;
+          }
+
+          .style-name {
+            @apply font-medium;
+          }
+        }
+
+        .re-render {
+          @apply mt-4 bg-accent text-background hover:bg-accent-hover transition-all border border-accent shadow-glow px-5 py-2 text-xs uppercase tracking-[0.1em] font-bold;
+        }
+      }
+
       .render-area {
         @apply relative bg-background min-h-[600px] flex items-center justify-center p-8;
 

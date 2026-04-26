@@ -1,5 +1,6 @@
 import puter from "@heyputer/puter.js";
 import { PLANORA_RENDER_PROMPT } from "./constants";
+import { getStyleById } from "./styles";
 
 export async function fetchAsDataUrl(url: string): Promise<string> {
   const response = await fetch(url);
@@ -34,7 +35,10 @@ export async function fetchAsDataUrl(url: string): Promise<string> {
   });
 }
 
-export const generate3DView = async ({ sourceImage }: Generate3DViewParams) => {
+export const generate3DView = async ({
+  sourceImage,
+  styleId,
+}: Generate3DViewParams) => {
   const dataUrl = sourceImage.startsWith("data:")
     ? sourceImage
     : await fetchAsDataUrl(sourceImage);
@@ -45,7 +49,12 @@ export const generate3DView = async ({ sourceImage }: Generate3DViewParams) => {
   if (!mimeType || !base64Data)
     throw new Error("Invalid Source Image Payload!");
 
-  const response = await puter.ai.txt2img(PLANORA_RENDER_PROMPT, {
+  const style = getStyleById(styleId ?? "default");
+  const prompt = style.promptModifier
+    ? `${PLANORA_RENDER_PROMPT}\n\n${style.promptModifier}`
+    : PLANORA_RENDER_PROMPT;
+
+  const response = await puter.ai.txt2img(prompt, {
     provider: "gemini",
     model: "gemini-2.5-flash-image-preview",
     input_image: base64Data,
