@@ -773,17 +773,31 @@
         }
 
         .compare-stage {
-          @apply relative overflow-hidden p-8 flex items-center justify-center min-h-[600px];
+          @apply relative overflow-hidden p-8 flex items-center justify-center;
           background-color: var(--color-background);
+          min-height: 400px;
+          max-height: 70vh;
 
-          [data-rcs="root"],
+          [data-rcs="root"] {
+            width: 100% !important;
+            max-height: 70vh !important;
+            background-color: var(--color-background);
+          }
+
           [data-rcs="clip-item"] {
             background-color: var(--color-background);
+          }
+
+          [data-rcs="container"] {
+            width: 100% !important;
+            max-height: 70vh !important;
           }
         }
 
         .compare-img {
-          @apply w-full max-h-[800px] object-contain;
+          @apply w-full;
+          max-height: 70vh;
+          object-fit: contain;
         }
       }
 
