@@ -90,7 +90,7 @@ export default function App() {
 
   return (
     <ToastProvider>
-      <main className="min-h-screen bg-background text-foreground relative z-10">
+      <main className="min-h-screen bg-background text-foreground relative">
         <Outlet
           context={{ ...authState, refreshAuth, setAuthState, signIn, signOut }}
         />
@@ -116,11 +116,13 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
-      <p>{details}</p>
+    <main className="pt-24 p-6 max-w-3xl mx-auto text-center">
+      <h1 className="text-6xl font-serif text-foreground mb-4">{message}</h1>
+      <p className="text-muted text-sm uppercase tracking-widest mb-8">
+        {details}
+      </p>
       {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
+        <pre className="w-full p-6 overflow-x-auto bg-surface border border-border text-left text-xs text-muted">
           <code>{stack}</code>
         </pre>
       )}

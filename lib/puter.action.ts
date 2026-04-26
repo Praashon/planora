@@ -12,6 +12,9 @@ export const signOut = () => puter.auth.signOut();
 
 export const getCurrentUser = async () => {
   try {
+    if (!puter.authToken && !puter.auth?.isSignedIn?.()) {
+      return null;
+    }
     return await puter.auth.getUser();
   } catch {
     return null;
@@ -103,6 +106,10 @@ export const createProject = async ({
 export const getProject = async () => {
   if (!PUTER_WORKER_URL) {
     console.warn("Missing VITE_PUTER_WORKER_URL; skip history fetch!");
+    return [];
+  }
+
+  if (!puter.authToken && !puter.auth?.isSignedIn?.()) {
     return [];
   }
 

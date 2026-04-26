@@ -3,6 +3,7 @@ import { generate3DView } from "lib/ai.action";
 import { createProject, getProjectById } from "lib/puter.action";
 import { Box, Download, RefreshCcw, Share2, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
 import {
   ReactCompareSlider,
   ReactCompareSliderImage,
@@ -23,6 +24,7 @@ const VisualizerId = () => {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentImage, setCurrentImage] = useState<string | null>(null);
+  const vizRef = useRef<HTMLDivElement>(null);
 
   const handleBack = () => navigate("/");
 
@@ -133,8 +135,18 @@ const VisualizerId = () => {
     void runGeneration(project);
   }, [project, isProjectLoading]);
 
+  useEffect(() => {
+    if (vizRef.current) {
+      gsap.fromTo(
+        vizRef.current.children,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: "power3.out" },
+      );
+    }
+  }, []);
+
   return (
-    <div className="visualizer">
+    <div className="visualizer" ref={vizRef}>
       <nav className="topbar">
         <div className="brand">
           <Box className="logo" />
