@@ -14,7 +14,7 @@ import {
 import { Button } from "components/ui/Button";
 import Upload from "components/Upload";
 import { useNavigate } from "react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createProject, deleteProject, getProject } from "lib/puter.action";
 import { useToast } from "components/Toast";
 import gsap from "gsap";
@@ -58,13 +58,14 @@ export default function Home() {
   const projectsHeadRef = useRef<HTMLDivElement>(null);
   const projectsGridRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
       if (headingRef.current) {
         const el = headingRef.current;
-        const fullText = "Build beautiful spaces at the speed of thought";
+        const fullText = el.textContent?.trim().replace(/\+s/g, " ") ?? "";
+        const accentStart = fullText.indexOf("speed of thought");
         el.innerHTML = "";
         el.style.opacity = "1";
         el.classList.add("typing");
@@ -150,7 +151,13 @@ export default function Home() {
           },
         );
       }
+    }, heroRef);
 
+    return () => ctx.revert();
+  }, []);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
       if (projectsHeadRef.current) {
         gsap.fromTo(
           projectsHeadRef.current,
@@ -322,10 +329,7 @@ export default function Home() {
         <div className="features-inner" ref={featuresRef}>
           <p className="features-label">Why Planora</p>
           <div className="features-grid">
-            <div
-              className="feature-card relative cursor-pointer"
-              style={{ opacity: 0 }}
-            >
+            <div className="feature-card relative cursor-pointer">
               <div className="feature-icon">
                 <Sparkles size={22} />
               </div>
@@ -335,10 +339,7 @@ export default function Home() {
                 using cutting-edge generative AI.
               </p>
             </div>
-            <div
-              className="feature-card relative cursor-pointer"
-              style={{ opacity: 0 }}
-            >
+            <div className="feature-card relative cursor-pointer">
               <div className="feature-icon">
                 <GitCompareArrows size={22} />
               </div>
@@ -348,10 +349,7 @@ export default function Home() {
                 side-by-side in real time.
               </p>
             </div>
-            <div
-              className="feature-card relative cursor-pointer"
-              style={{ opacity: 0 }}
-            >
+            <div className="feature-card relative cursor-pointer">
               <div className="feature-icon">
                 <Download size={22} />
               </div>
@@ -408,7 +406,6 @@ export default function Home() {
                     key={id}
                     className="project-card"
                     onClick={() => navigate(`/visualizer/${id}`)}
-                    style={{ opacity: 0 }}
                   >
                     <div className="preview">
                       <img

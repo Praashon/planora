@@ -6,16 +6,23 @@ gsap.registerPlugin(ScrollTrigger);
 export function revealHeading(el: HTMLElement | null) {
   if (!el) return;
   const words = el.innerText.split(" ");
-  el.innerHTML = words
-    .map((w) => `<span class="inline-block overflow-hidden"><span class="reveal-word inline-block translate-y-full">${w}</span></span>`)
-    .join(" ");
-
-  gsap.to(el.querySelectorAll(".reveal-word"), {
-    y: 0,
-    duration: 1,
-    stagger: 0.04,
-    ease: "power4.out",
+  el.textContent = "";
+  words.forEach((w, i) => {
+    if (i > 0) el.append(" ");
+    const outer = document.createElement("span");
+    outer.className = "inline-block overflow-hidden";
+    const inner = document.createElement("span");
+    inner.className = "reveal-word inline-block";
+    inner.textContent = w;
+    outer.appendChild(inner);
+    el.appendChild(outer);
   });
+
+  gsap.fromTo(
+    el.querySelectorAll(".reveal-word"),
+    { yPercent: 100 },
+    { yPercent: 0, duration: 1, stagger: 0.04, ease: "power4.out" },
+  );
 }
 
 export function scrollReveal(
@@ -23,7 +30,7 @@ export function scrollReveal(
   opts?: { y?: number; delay?: number; stagger?: number },
 ) {
   if (!el) return;
-  const children = el.children.length > 1 ? el.children : [el];
+  const children = el.children.length > 0 ? el.children : [el];
   gsap.fromTo(
     children,
     { opacity: 0, y: opts?.y ?? 40 },

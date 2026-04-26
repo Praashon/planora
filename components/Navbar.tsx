@@ -1,7 +1,7 @@
 import { Box, Menu, X } from "lucide-react";
 import Button from "./ui/Button";
 import { useOutletContext } from "react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
 const Navbar = () => {
@@ -13,18 +13,24 @@ const Navbar = () => {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    if (navRef.current) {
-      gsap.fromTo(
-        navRef.current,
-        { y: -20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.1 },
-      );
-    }
+  useLayoutEffect(() => {
+    if (!navRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.set(navRef.current!, { y: -20, opacity: 0 });
+      gsap.to(navRef.current!, {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: "power3.out",
+        delay: 0.1,
+      });
+    }, navRef);
+    return () => ctx.revert();
   }, []);
 
   const handleAuthClick = async () => {
@@ -45,11 +51,7 @@ const Navbar = () => {
 
   return (
     <>
-      <header
-        ref={navRef}
-        className={`navbar ${scrolled ? "scrolled" : ""}`}
-        style={{ opacity: 0 }}
-      >
+      <header ref={navRef} className={`navbar ${scrolled ? "scrolled" : ""}`}>
         <nav className="inner">
           <div className="left">
             <div className="brand">
