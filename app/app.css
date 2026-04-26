@@ -908,4 +908,121 @@
       @apply text-sm text-muted;
     }
   }
+
+  /* ─── How It Works ─── */
+  .how-it-works {
+    @apply min-h-screen bg-background font-sans;
+
+    .hiw-hero {
+      @apply pt-40 pb-20 px-6 md:px-12 max-w-4xl mx-auto text-center;
+
+      .hiw-label {
+        @apply text-[10px] uppercase tracking-[0.3em] text-accent mb-6;
+      }
+
+      h1 {
+        @apply text-5xl md:text-7xl font-serif leading-[0.95] mb-6;
+        color: var(--color-foreground);
+
+        .accent {
+          color: var(--color-accent);
+        }
+      }
+
+      .hiw-subtitle {
+        @apply text-base md:text-lg leading-relaxed max-w-2xl mx-auto;
+        color: var(--color-muted);
+      }
+    }
+
+    .hiw-steps {
+      @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto px-6 md:px-12 pb-32;
+
+      .step-card {
+        @apply relative bg-surface border border-border p-8 transition-all duration-500 hover:border-accent/30;
+
+        .step-number {
+          @apply text-[10px] uppercase tracking-[0.3em] text-accent/50 mb-6;
+        }
+
+        .step-icon {
+          @apply w-12 h-12 flex items-center justify-center text-accent mb-6 border border-accent/20 transition-transform duration-500;
+        }
+
+        &:hover .step-icon {
+          @apply scale-110;
+        }
+
+        h3 {
+          @apply text-lg font-serif mb-3;
+          color: var(--color-foreground);
+        }
+
+        .step-desc {
+          @apply text-sm leading-relaxed mb-4;
+          color: var(--color-muted);
+        }
+
+        .step-detail {
+          @apply text-[11px] leading-relaxed p-3 border border-border;
+          color: var(--color-muted);
+          background-color: var(--color-background);
+        }
+
+        .step-arrow {
+          @apply hidden lg:flex absolute -right-5 top-1/2 -translate-y-1/2 w-10 h-10 items-center justify-center text-accent/30 z-10;
+        }
+      }
+    }
+
+    .hiw-prompt {
+      @apply max-w-4xl mx-auto px-6 md:px-12 pb-32;
+
+      .prompt-header {
+        @apply text-center mb-12;
+
+        .prompt-label {
+          @apply text-[10px] uppercase tracking-[0.3em] text-accent mb-4;
+        }
+
+        h2 {
+          @apply text-3xl md:text-4xl font-serif mb-4;
+          color: var(--color-foreground);
+        }
+
+        .prompt-subtitle {
+          @apply text-sm leading-relaxed max-w-xl mx-auto;
+          color: var(--color-muted);
+        }
+      }
+
+      .prompt-block {
+        @apply border border-border overflow-hidden;
+        background-color: var(--color-surface);
+
+        .prompt-topbar {
+          @apply flex items-center gap-2 px-5 py-3 border-b border-border;
+
+          .prompt-dot {
+            @apply w-2.5 h-2.5 rounded-full;
+            background-color: var(--color-border-hover);
+          }
+
+          .prompt-filename {
+            @apply ml-3 text-[10px] uppercase tracking-[0.2em];
+            color: var(--color-muted);
+          }
+        }
+
+        .prompt-code {
+          @apply p-6 overflow-x-auto text-xs leading-relaxed;
+          color: var(--color-muted);
+
+          code {
+            @apply whitespace-pre-wrap break-words;
+          }
+        }
+      }
+    }
+  }
 }

@@ -60,10 +60,9 @@ const Navbar = () => {
             </div>
 
             <ul className="links">
-              <a href="#">Product</a>
-              <a href="#">Pricing</a>
+              <a href="/how-it-works">How It Works</a>
+              <a href="/demo">Demo</a>
               <a href="#">Community</a>
-              <a href="#">Enterprise</a>
             </ul>
           </div>
 
@@ -101,17 +100,14 @@ const Navbar = () => {
 
       {mobileOpen && (
         <div className="mobile-menu">
-          <a href="#" onClick={() => setMobileOpen(false)}>
-            Product
+          <a href="/how-it-works" onClick={() => setMobileOpen(false)}>
+            How It Works
           </a>
-          <a href="#" onClick={() => setMobileOpen(false)}>
-            Pricing
+          <a href="/demo" onClick={() => setMobileOpen(false)}>
+            Demo
           </a>
           <a href="#" onClick={() => setMobileOpen(false)}>
             Community
-          </a>
-          <a href="#" onClick={() => setMobileOpen(false)}>
-            Enterprise
           </a>
 
           {isSignedIn ? (
