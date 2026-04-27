@@ -254,7 +254,7 @@ const VisualizerId = () => {
         <div className="panel compare">
           <div className="panel-header">
             <div className="panel-meta">
-              <p>Comparision</p>
+              <p>Comparison</p>
               <h3>Before and After</h3>
             </div>
             <div className="hint">Drag to Compare</div>

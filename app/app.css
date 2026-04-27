@@ -134,7 +134,7 @@
         @apply flex items-center space-x-12;
 
         .brand {
-          @apply flex items-center space-x-3 cursor-pointer;
+          @apply flex items-center space-x-3 cursor-pointer no-underline;
 
           &:hover .logo {
             @apply rotate-12 text-accent;
@@ -150,7 +150,11 @@
         }
 
         .links {
-          @apply hidden md:flex items-center space-x-8;
+          @apply hidden md:flex items-center space-x-8 list-none p-0 m-0;
+
+          li {
+            @apply contents;
+          }
 
           a {
             @apply text-[11px] uppercase tracking-[0.15em] text-muted hover:text-foreground transition-colors relative font-medium;
@@ -639,9 +643,12 @@
   /* ─── Visualizer ─── */
   .visualizer {
     @apply min-h-screen bg-background pt-8 pb-12 px-6 lg:px-12 flex flex-col items-center font-sans relative;
+    color: var(--color-foreground);
 
     .topbar {
-      @apply w-full max-w-[1400px] flex items-center justify-between mb-8;
+      @apply w-full max-w-[1400px] flex items-center justify-between mb-8 px-5 py-3 border border-border;
+      background-color: rgba(17, 17, 17, 0.92);
+      box-shadow: 0 18px 60px -45px rgba(212, 165, 116, 0.55);
 
       .brand {
         @apply flex items-center space-x-3 cursor-pointer;
@@ -655,12 +662,19 @@
         }
 
         .name {
-          @apply text-2xl font-serif text-foreground tracking-tight;
+          @apply text-2xl font-serif tracking-tight;
+          color: var(--color-foreground);
         }
       }
 
       .exit {
-        @apply text-[10px] uppercase tracking-[0.2em] text-muted hover:text-foreground transition-colors;
+        @apply text-[10px] uppercase tracking-[0.2em] transition-colors;
+        color: rgba(245, 245, 243, 0.72);
+
+        &:hover {
+          color: var(--color-foreground);
+          background-color: rgba(255, 255, 255, 0.06);
+        }
 
         .icon {
           @apply w-4 h-4 mr-2 inline-block -mt-0.5;
@@ -674,21 +688,29 @@
 
     .panel {
       @apply border border-border overflow-hidden;
-      background-color: var(--color-surface);
+      background-color: rgba(17, 17, 17, 0.96);
+      box-shadow: 0 24px 80px -50px rgba(0, 0, 0, 0.9);
 
       .panel-header {
         @apply flex flex-col md:flex-row md:items-end md:justify-between gap-6 p-8 border-b border-border z-10 relative;
-        background-color: var(--color-surface);
+        background:
+          linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.045),
+            rgba(255, 255, 255, 0.01)
+          ),
+          #111111;
 
         .panel-meta {
           p {
-            @apply text-[10px] uppercase tracking-[0.2em] mb-2;
-            color: var(--color-muted);
+            @apply text-[10px] uppercase tracking-[0.2em] mb-2 font-bold;
+            color: rgba(212, 165, 116, 0.92);
           }
 
           h2 {
             @apply text-4xl lg:text-5xl font-serif leading-[0.9];
             color: var(--color-foreground);
+            text-shadow: 0 1px 24px rgba(0, 0, 0, 0.65);
           }
 
           h3 {
@@ -698,7 +720,7 @@
 
           .note {
             @apply text-xs tracking-widest mt-4 uppercase;
-            color: var(--color-muted);
+            color: rgba(245, 245, 243, 0.62);
           }
         }
 
@@ -707,22 +729,37 @@
 
           .export {
             @apply bg-accent text-background hover:bg-accent-hover transition-all border border-accent shadow-glow px-6 py-2.5 text-xs uppercase tracking-[0.1em] font-bold;
+            color: #0a0a0a;
+
+            &:disabled {
+              background-color: rgba(212, 165, 116, 0.35);
+              border-color: rgba(212, 165, 116, 0.22);
+              color: rgba(10, 10, 10, 0.72);
+            }
           }
 
           .share {
-            @apply border border-border hover:border-accent/50 hover:text-accent px-6 py-2.5 text-xs uppercase tracking-[0.1em] transition-all;
-            background-color: transparent;
-            color: var(--color-foreground);
+            @apply border hover:border-accent/50 hover:text-accent px-6 py-2.5 text-xs uppercase tracking-[0.1em] transition-all;
+            background-color: rgba(255, 255, 255, 0.035);
+            border-color: rgba(255, 255, 255, 0.14);
+            color: rgba(245, 245, 243, 0.86);
+
+            &:disabled {
+              background-color: rgba(255, 255, 255, 0.02);
+              border-color: rgba(255, 255, 255, 0.08);
+              color: rgba(245, 245, 243, 0.42);
+            }
           }
         }
       }
 
       .style-selector {
         @apply px-8 py-6 border-b border-border;
+        background-color: rgba(10, 10, 10, 0.72);
 
         .style-label {
-          @apply text-[10px] uppercase tracking-[0.2em] mb-4;
-          color: var(--color-muted);
+          @apply text-[10px] uppercase tracking-[0.2em] mb-4 font-bold;
+          color: rgba(245, 245, 243, 0.68);
         }
 
         .style-options {
@@ -731,12 +768,13 @@
 
         .style-pill {
           @apply inline-flex items-center gap-2 px-4 py-2.5 border border-border text-xs uppercase tracking-[0.1em] transition-all duration-300 cursor-pointer;
-          background-color: transparent;
-          color: var(--color-muted);
+          background-color: rgba(255, 255, 255, 0.025);
+          color: rgba(245, 245, 243, 0.68);
 
           &:hover:not(:disabled) {
             @apply border-accent/40;
             color: var(--color-foreground);
+            background-color: rgba(255, 255, 255, 0.055);
           }
 
           &.active {
@@ -764,11 +802,22 @@
       }
 
       .render-area {
-        @apply relative bg-background min-h-[600px] flex items-center justify-center p-8;
+        @apply relative min-h-[600px] flex items-center justify-center p-8;
+        background:
+          radial-gradient(
+            circle at center,
+            rgba(212, 165, 116, 0.07),
+            transparent 42%
+          ),
+          #070707;
 
         .render-img {
           @apply w-full max-h-[800px] object-contain transition-all duration-700 opacity-100 scale-100;
-          box-shadow: 0 0 80px -20px rgba(212, 165, 116, 0.1);
+          background-color: #ffffff;
+          box-shadow:
+            0 0 0 1px rgba(255, 255, 255, 0.06),
+            0 30px 90px -42px rgba(0, 0, 0, 0.95),
+            0 0 80px -20px rgba(212, 165, 116, 0.12);
         }
 
         &.is-processing {
@@ -783,13 +832,17 @@
 
         .render-fallback {
           @apply w-full max-h-[800px] object-contain opacity-30 grayscale;
+          background-color: #ffffff;
         }
 
         .render-overlay {
-          @apply absolute inset-0 flex flex-col items-center justify-center z-30 bg-background/80 backdrop-blur-xl transition-opacity duration-500;
+          @apply absolute inset-0 flex flex-col items-center justify-center z-30 backdrop-blur-xl transition-opacity duration-500;
+          background-color: rgba(10, 10, 10, 0.84);
 
           .rendering-card {
-            @apply bg-surface px-10 py-8 border border-border flex flex-col items-center shadow-card;
+            @apply px-10 py-8 border flex flex-col items-center shadow-card;
+            background-color: #111111;
+            border-color: rgba(255, 255, 255, 0.12);
 
             .spinner {
               @apply w-8 h-8 mb-6 animate-spin text-accent;
@@ -800,7 +853,8 @@
             }
 
             .subtitle {
-              @apply text-[10px] uppercase tracking-[0.2em] text-muted mt-3;
+              @apply text-[10px] uppercase tracking-[0.2em] mt-3;
+              color: rgba(245, 245, 243, 0.62);
             }
           }
         }
@@ -813,37 +867,43 @@
           @apply p-8;
 
           .hint {
-            @apply text-[10px] uppercase tracking-[0.2em];
-            color: var(--color-muted);
+            @apply text-[10px] uppercase tracking-[0.2em] font-bold px-4 py-2 border;
+            color: rgba(212, 165, 116, 0.9);
+            background-color: rgba(212, 165, 116, 0.08);
+            border-color: rgba(212, 165, 116, 0.18);
           }
         }
 
         .compare-stage {
           @apply relative overflow-hidden p-8 flex items-center justify-center;
-          background-color: var(--color-background);
+          background:
+            radial-gradient(
+              circle at center,
+              rgba(255, 255, 255, 0.035),
+              transparent 45%
+            ),
+            #070707;
           min-height: 400px;
           max-height: 70vh;
 
           [data-rcs="root"] {
             width: 100% !important;
             max-height: 70vh !important;
-            background-color: var(--color-background);
+            background-color: #ffffff;
+            box-shadow:
+              0 0 0 1px rgba(255, 255, 255, 0.08),
+              0 28px 80px -44px rgba(0, 0, 0, 0.95);
           }
 
           [data-rcs="clip-item"] {
-            background-color: var(--color-background);
+            background-color: #ffffff;
           }
 
           [data-rcs="container"] {
             width: 100% !important;
             max-height: 70vh !important;
+            background-color: #ffffff;
           }
-        }
-
-        .compare-img {
-          @apply w-full;
-          max-height: 70vh;
-          object-fit: contain;
         }
       }
 

@@ -1,6 +1,13 @@
 import Navbar from "components/Navbar";
 import type { Route } from "./+types/how-it-works";
-import { Box, Upload, Cpu, Paintbrush, ImageDown, ArrowRight } from "lucide-react";
+import {
+  Box,
+  Upload,
+  Cpu,
+  Paintbrush,
+  ImageDown,
+  ArrowRight,
+} from "lucide-react";
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -26,7 +33,8 @@ const STEPS = [
     description:
       "Drag and drop a JPG or PNG floor plan image (up to 50 MB). Planora accepts standard architectural floor plans with room labels, door arcs, and window markers.",
     icon: Upload,
-    detail: "Supported formats: JPG, PNG. The image is converted to a base64 data URL for processing.",
+    detail:
+      "Supported formats: JPG, PNG. The image is converted to a base64 data URL for processing.",
   },
   {
     number: "02",
@@ -34,7 +42,8 @@ const STEPS = [
     description:
       "The Gemini vision model interprets walls, doors, windows, and furniture icons from the floor plan. It maps architectural symbols to real-world objects.",
     icon: Cpu,
-    detail: "Model: gemini-2.5-flash-image-preview via Puter AI. The floor plan is sent as an input image alongside a carefully engineered prompt.",
+    detail:
+      "Model: gemini-2.5-flash-image-preview via Puter AI. The floor plan is sent as an input image alongside a carefully engineered prompt.",
   },
   {
     number: "03",
@@ -42,7 +51,8 @@ const STEPS = [
     description:
       "A detailed prompt instructs the AI on strict requirements: remove text, match geometry exactly, apply realistic materials, and render top-down orthographic view.",
     icon: Paintbrush,
-    detail: "The prompt includes style overrides when a user selects Modern, Minimalist, Rustic, Industrial, or Scandinavian presets.",
+    detail:
+      "The prompt includes style overrides when a user selects Modern, Minimalist, Rustic, Industrial, or Scandinavian presets.",
   },
   {
     number: "04",
@@ -50,7 +60,8 @@ const STEPS = [
     description:
       "A 1024×1024 photorealistic top-down 3D render is generated and displayed. Users can compare before/after with a slider, export as PNG, or share a link.",
     icon: ImageDown,
-    detail: "The rendered image is persisted to cloud storage and associated with your project for future access.",
+    detail:
+      "The rendered image is persisted to cloud storage and associated with your project for future access.",
   },
 ];
 
@@ -63,6 +74,7 @@ export default function HowItWorks() {
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       if (heroRef.current) {
+        gsap.set(heroRef.current.children, { opacity: 0, y: 30 });
         gsap.fromTo(
           heroRef.current.children,
           { opacity: 0, y: 30 },
@@ -77,6 +89,10 @@ export default function HowItWorks() {
       }
 
       if (stepsRef.current) {
+        gsap.set(stepsRef.current.querySelectorAll(".step-card"), {
+          opacity: 0,
+          y: 50,
+        });
         gsap.fromTo(
           stepsRef.current.querySelectorAll(".step-card"),
           { opacity: 0, y: 50 },
@@ -96,6 +112,7 @@ export default function HowItWorks() {
       }
 
       if (promptRef.current) {
+        gsap.set(promptRef.current, { opacity: 0, y: 40 });
         gsap.fromTo(
           promptRef.current,
           { opacity: 0, y: 40 },
@@ -123,13 +140,11 @@ export default function HowItWorks() {
 
       {/* ─── Hero ─── */}
       <section className="hiw-hero" ref={heroRef}>
-        <p className="hiw-label" style={{ opacity: 0 }}>
-          Under the Hood
-        </p>
-        <h1 style={{ opacity: 0 }}>
+        <p className="hiw-label">Under the Hood</p>
+        <h1>
           How <span className="accent">Planora</span> Works
         </h1>
-        <p className="hiw-subtitle" style={{ opacity: 0 }}>
+        <p className="hiw-subtitle">
           From a 2D floor plan to a photorealistic 3D render in four steps,
           powered by AI prompt engineering and the Gemini vision model.
         </p>
@@ -140,7 +155,7 @@ export default function HowItWorks() {
         {STEPS.map((step, i) => {
           const Icon = step.icon;
           return (
-            <div key={step.number} className="step-card" style={{ opacity: 0 }}>
+            <div key={step.number} className="step-card">
               <div className="step-number">{step.number}</div>
               <div className="step-icon">
                 <Icon size={28} />
@@ -159,7 +174,7 @@ export default function HowItWorks() {
       </section>
 
       {/* ─── Prompt Engineering Showcase ─── */}
-      <section className="hiw-prompt" ref={promptRef} style={{ opacity: 0 }}>
+      <section className="hiw-prompt" ref={promptRef}>
         <div className="prompt-header">
           <p className="prompt-label">Prompt Engineering</p>
           <h2>The AI Instruction Set</h2>

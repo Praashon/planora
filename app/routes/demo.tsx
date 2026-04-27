@@ -2,7 +2,13 @@ import Navbar from "components/Navbar";
 import type { Route } from "./+types/demo";
 import { DEMO_ITEMS, type DemoItem } from "lib/demo-data";
 import { Box, X, ChevronLeft, ChevronRight } from "lucide-react";
-import { useLayoutEffect, useRef, useState, useCallback, useEffect } from "react";
+import {
+  useLayoutEffect,
+  useRef,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -31,6 +37,9 @@ export default function Demo() {
   const [activeDemo, setActiveDemo] = useState<DemoItem | null>(null);
   const [autoPlay, setAutoPlay] = useState(false);
   const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const lightboxRef = useRef<HTMLDivElement>(null);
+  const openerRef = useRef<Element | null>(null);
+  const backdropPressRef = useRef(false);
 
   const activeIndex = activeDemo
     ? DEMO_ITEMS.findIndex((d) => d.id === activeDemo.id)
@@ -68,13 +77,53 @@ export default function Demo() {
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (!activeDemo) return;
-      if (e.key === "Escape") setActiveDemo(null);
+      if (e.key === "Escape") {
+        setActiveDemo(null);
+        setAutoPlay(false);
+      }
       if (e.key === "ArrowLeft") handlePrev();
       if (e.key === "ArrowRight") handleNext();
+
+      if (e.key === "Tab" && lightboxRef.current) {
+        const focusable = lightboxRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [activeDemo, handlePrev, handleNext]);
+
+  useEffect(() => {
+    if (activeDemo) {
+      openerRef.current = document.activeElement;
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+
+      requestAnimationFrame(() => {
+        const closeBtn =
+          lightboxRef.current?.querySelector<HTMLElement>(".close-btn");
+        closeBtn?.focus();
+      });
+
+      return () => {
+        document.body.style.overflow = prevOverflow;
+        if (openerRef.current instanceof HTMLElement) {
+          openerRef.current.focus();
+        }
+      };
+    }
+  }, [activeDemo]);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -162,18 +211,26 @@ export default function Demo() {
       {/* ─── Lightbox ─── */}
       {activeDemo && (
         <div
+          ref={lightboxRef}
           className="demo-lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="lightbox-title"
+          onPointerDown={(e) => {
+            backdropPressRef.current = e.target === e.currentTarget;
+          }}
           onClick={(e) => {
-            if (e.target === e.currentTarget) {
+            if (e.target === e.currentTarget && backdropPressRef.current) {
               setActiveDemo(null);
               setAutoPlay(false);
             }
+            backdropPressRef.current = false;
           }}
         >
           <div className="lightbox-content">
             <div className="lightbox-header">
               <div>
-                <h2>{activeDemo.name}</h2>
+                <h2 id="lightbox-title">{activeDemo.name}</h2>
                 <span className="lightbox-style">{activeDemo.style}</span>
               </div>
               <div className="lightbox-actions">
