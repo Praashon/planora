@@ -1,6 +1,6 @@
 import { Box, Menu, X } from "lucide-react";
 import Button from "./ui/Button";
-import { useOutletContext } from "react-router";
+import { Link, useOutletContext } from "react-router";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
@@ -54,16 +54,21 @@ const Navbar = () => {
       <header ref={navRef} className={`navbar ${scrolled ? "scrolled" : ""}`}>
         <nav className="inner">
           <div className="left">
-            <div className="brand">
+            <Link to="/" className="brand">
               <Box className="logo" />
               <span className="name">Planora</span>
-            </div>
+            </Link>
 
             <ul className="links">
-              <a href="#">Product</a>
-              <a href="#">Pricing</a>
-              <a href="#">Community</a>
-              <a href="#">Enterprise</a>
+              <li>
+                <Link to="/how-it-works">How It Works</Link>
+              </li>
+              <li>
+                <Link to="/demo">Demo</Link>
+              </li>
+              <li>
+                <a href="#">Community</a>
+              </li>
             </ul>
           </div>
 
@@ -101,17 +106,14 @@ const Navbar = () => {
 
       {mobileOpen && (
         <div className="mobile-menu">
-          <a href="#" onClick={() => setMobileOpen(false)}>
-            Product
-          </a>
-          <a href="#" onClick={() => setMobileOpen(false)}>
-            Pricing
-          </a>
+          <Link to="/how-it-works" onClick={() => setMobileOpen(false)}>
+            How It Works
+          </Link>
+          <Link to="/demo" onClick={() => setMobileOpen(false)}>
+            Demo
+          </Link>
           <a href="#" onClick={() => setMobileOpen(false)}>
             Community
-          </a>
-          <a href="#" onClick={() => setMobileOpen(false)}>
-            Enterprise
           </a>
 
           {isSignedIn ? (

@@ -11,7 +11,6 @@ import {
   Sparkles,
   Trash2,
 } from "lucide-react";
-import { Button } from "components/ui/Button";
 import Upload from "components/Upload";
 import { useNavigate } from "react-router";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -296,9 +295,9 @@ export default function Home() {
             <a href="#upload" className="cta">
               Start Building <ArrowRight className="icon" />
             </a>
-            <Button variant="outline" size="lg" className="demo">
-              Watch Demo
-            </Button>
+            <a href="/how-it-works" className="demo">
+              How It Works
+            </a>
           </div>
         </div>
 
@@ -455,9 +454,9 @@ export default function Home() {
             <span>Planora</span>
           </div>
           <div className="footer-links">
-            <a href="#">Product</a>
+            <a href="/how-it-works">How It Works</a>
+            <a href="/demo">Demo</a>
             <a href="#">Community</a>
-            <a href="#">GitHub</a>
           </div>
           <span className="footer-copy">
             &copy; {new Date().getFullYear()} Planora. All rights reserved.

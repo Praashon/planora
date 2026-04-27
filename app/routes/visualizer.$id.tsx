@@ -1,6 +1,7 @@
 import Button from "components/ui/Button";
 import { generate3DView } from "lib/ai.action";
 import { createProject, getProjectById } from "lib/puter.action";
+import { STYLE_PRESETS, type StylePreset } from "lib/styles";
 import { Box, Download, RefreshCcw, Share2, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
@@ -24,6 +25,9 @@ const VisualizerId = () => {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentImage, setCurrentImage] = useState<string | null>(null);
+  const [selectedStyle, setSelectedStyle] = useState<StylePreset>(
+    STYLE_PRESETS[0],
+  );
   const vizRef = useRef<HTMLDivElement>(null);
 
   const handleBack = () => navigate("/");
@@ -50,13 +54,14 @@ const VisualizerId = () => {
     }
   };
 
-  const runGeneration = async (item: DesignItem) => {
+  const runGeneration = async (item: DesignItem, styleId?: string) => {
     if (!id || !item.sourceImage) return;
 
     try {
       setIsProcessing(true);
       const result = await generate3DView({
         sourceImage: item.sourceImage,
+        styleId: styleId ?? selectedStyle.id,
       });
 
       if (result.renderedImage) {
@@ -186,6 +191,37 @@ const VisualizerId = () => {
             </div>
           </div>
 
+          <div className="style-selector">
+            <p className="style-label">Interior Style</p>
+            <div className="style-options">
+              {STYLE_PRESETS.map((style) => (
+                <button
+                  key={style.id}
+                  className={`style-pill ${selectedStyle.id === style.id ? "active" : ""}`}
+                  onClick={() => setSelectedStyle(style)}
+                  disabled={isProcessing}
+                  title={style.description}
+                >
+                  <span className="style-icon">{style.icon}</span>
+                  <span className="style-name">{style.name}</span>
+                </button>
+              ))}
+            </div>
+            {selectedStyle.id !== "default" && currentImage && (
+              <Button
+                size="sm"
+                className="re-render"
+                onClick={() =>
+                  project && runGeneration(project, selectedStyle.id)
+                }
+                disabled={isProcessing}
+              >
+                <RefreshCcw className="w-3.5 h-3.5 mr-2" />
+                Re-render with {selectedStyle.name}
+              </Button>
+            )}
+          </div>
+
           <div className={`render-area ${isProcessing ? "is-processing" : ""}`}>
             {currentImage ? (
               <img src={currentImage} alt="Ai Render" className="render-img" />
@@ -218,7 +254,7 @@ const VisualizerId = () => {
         <div className="panel compare">
           <div className="panel-header">
             <div className="panel-meta">
-              <p>Comparision</p>
+              <p>Comparison</p>
               <h3>Before and After</h3>
             </div>
             <div className="hint">Drag to Compare</div>
@@ -228,19 +264,29 @@ const VisualizerId = () => {
             {project?.sourceImage && currentImage ? (
               <ReactCompareSlider
                 defaultValue={50}
-                style={{ width: "100%", height: "auto" }}
+                style={{ width: "100%", height: "100%" }}
                 itemOne={
                   <ReactCompareSliderImage
                     src={project?.sourceImage}
                     alt="Before"
-                    className="compare-img"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      maxHeight: "70vh",
+                      objectFit: "contain",
+                    }}
                   />
                 }
                 itemTwo={
                   <ReactCompareSliderImage
                     src={currentImage || project?.renderedImage || ""}
                     alt="After"
-                    className="compare-img"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      maxHeight: "70vh",
+                      objectFit: "contain",
+                    }}
                   />
                 }
               />
