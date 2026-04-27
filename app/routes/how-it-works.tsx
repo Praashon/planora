@@ -9,6 +9,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useLayoutEffect, useRef } from "react";
+import { Link } from "react-router";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PLANORA_RENDER_PROMPT } from "lib/constants";
@@ -205,9 +206,9 @@ export default function HowItWorks() {
             <span>Planora</span>
           </div>
           <div className="footer-links">
-            <a href="/">Home</a>
-            <a href="/how-it-works">How It Works</a>
-            <a href="/demo">Demo</a>
+            <Link to="/">Home</Link>
+            <Link to="/how-it-works">How It Works</Link>
+            <Link to="/demo">Demo</Link>
           </div>
           <span className="footer-copy">
             &copy; {new Date().getFullYear()} Planora. All rights reserved.
